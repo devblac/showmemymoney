@@ -87,4 +87,61 @@ describe('InMemoryStorage', () => {
       expect(portfolio.totalValuation).toBeGreaterThan(portfolio.cash.balance);
     });
   });
+
+  describe('Historical quotes and valuation', () => {
+    it('should store historical quotes when updating', async () => {
+      const now = new Date();
+      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      
+      // Update quote for yesterday
+      await storage.updateQuote({ securityId: '1', price: 100, at: yesterday });
+      
+      // Update quote for today
+      await storage.updateQuote({ securityId: '1', price: 150, at: now });
+      
+      // Get quote at yesterday's date
+      const historicalQuote = await storage.getQuoteBySecurityIdAndDate('1', yesterday);
+      expect(historicalQuote).toBeTruthy();
+      expect(historicalQuote?.price).toBe(100);
+      
+      // Get current quote
+      const currentQuote = await storage.getQuoteBySecurityId('1');
+      expect(currentQuote?.price).toBe(150);
+    });
+
+    it('should return most recent quote before given date', async () => {
+      const now = new Date();
+      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+      
+      await storage.updateQuote({ securityId: '1', price: 90, at: twoDaysAgo });
+      await storage.updateQuote({ securityId: '1', price: 100, at: yesterday });
+      await storage.updateQuote({ securityId: '1', price: 150, at: now });
+      
+      const quote = await storage.getQuoteBySecurityIdAndDate('1', yesterday);
+      expect(quote?.price).toBe(100);
+    });
+
+    it('should calculate historical portfolio valuation', async () => {
+      const now = new Date();
+      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      
+      // Set historical quotes
+      await storage.updateQuote({ securityId: '1', price: 100, at: yesterday }); // AAPL
+      await storage.updateQuote({ securityId: '2', price: 2000, at: yesterday }); // GOOGL
+      
+      // Current position is 10 AAPL and 5 GOOGL
+      const historicalValuation = await storage.getValuationAtDate(yesterday);
+      
+      // Expected: (10 * 100) + (5 * 2000) + 100000 (cash) = 111000
+      expect(historicalValuation.totalValuation).toBe(111000);
+      expect(historicalValuation.at).toEqual(yesterday);
+    });
+
+    it('should return null for quotes before any historical data', async () => {
+      const veryOldDate = new Date('2000-01-01');
+      const quote = await storage.getQuoteBySecurityIdAndDate('1', veryOldDate);
+      expect(quote).toBeNull();
+    });
+  });
 });

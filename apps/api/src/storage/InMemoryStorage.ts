@@ -13,6 +13,7 @@ export class InMemoryStorage implements IStorage {
   private securities: Security[] = [];
   private positions: Position[] = [];
   private quotes: Quote[] = [];
+  private historicalQuotes: Quote[] = [];
 
   constructor() {
     this.initializeData();
@@ -27,13 +28,17 @@ export class InMemoryStorage implements IStorage {
       { id: '4', symbol: 'MSFT', name: 'Microsoft Corp.', type: 'acción' },
     ];
 
+    const now = new Date();
     // Sample quotes
     this.quotes = [
-      { securityId: '1', price: 150.0, at: new Date() },
-      { securityId: '2', price: 2800.0, at: new Date() },
-      { securityId: '3', price: 1000.0, at: new Date() },
-      { securityId: '4', price: 380.0, at: new Date() },
+      { securityId: '1', price: 150.0, at: now },
+      { securityId: '2', price: 2800.0, at: now },
+      { securityId: '3', price: 1000.0, at: now },
+      { securityId: '4', price: 380.0, at: now },
     ];
+
+    // Initialize historical quotes with current quotes
+    this.historicalQuotes = [...this.quotes];
 
     // Sample positions
     this.positions = [
@@ -98,10 +103,18 @@ export class InMemoryStorage implements IStorage {
     } else {
       this.quotes.push({ ...quote });
     }
+    
+    // Store in historical quotes
+    this.historicalQuotes.push({ ...quote });
   }
 
   async getQuoteBySecurityIdAndDate(securityId: string, at: Date): Promise<Quote | null> {
-    return this.quotes.find(q => q.securityId === securityId) || null;
+    // Find the most recent quote before or at the given date
+    const validQuotes = this.historicalQuotes
+      .filter(q => q.securityId === securityId && q.at <= at)
+      .sort((a, b) => b.at.getTime() - a.at.getTime());
+
+    return validQuotes[0] || null;
   }
 
   async getPortfolioValue(): Promise<PortfolioDTO> {
@@ -210,10 +223,22 @@ export class InMemoryStorage implements IStorage {
   }
 
   async getValuationAtDate(at: Date): Promise<ValuationResponse> {
-    // For in-memory storage, return current valuation
-    const portfolio = await this.getPortfolioValue();
+    const positions = await this.getPositions();
+    const cash = await this.getCashAccount();
+    
+    // Calculate historical valuation
+    const positionsValue = await Promise.all(
+      positions.map(async (position) => {
+        const quote = await this.getQuoteBySecurityIdAndDate(position.securityId, at);
+        if (!quote) return 0;
+        return position.quantity * quote.price;
+      })
+    );
+
+    const totalValuation = cash.balance + positionsValue.reduce((sum, val) => sum + val, 0);
+
     return {
-      totalValuation: portfolio.totalValuation,
+      totalValuation,
       at,
     };
   }
