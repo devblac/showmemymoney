@@ -29,6 +29,7 @@ export interface PortfolioDTO {
     valuation: number;
   }>;
   securities: Security[];
+  quotes: Quote[];
   totalValuation: number;
 }
 
@@ -89,8 +90,9 @@ export interface AppState {
 }
 
 export interface Settings {
-  marketData: MarketDataConfig;
+  theme: string;
   storage: StorageConfig;
+  marketData: MarketDataConfig;
 }
 
 export interface ApiError {

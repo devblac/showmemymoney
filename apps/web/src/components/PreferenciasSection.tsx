@@ -8,6 +8,7 @@ import { StorageType } from '../types/api';
 import { getStoragePreference, setStoragePreference } from '../services/storagePreference';
 import { localStorageService } from '../services/localStorageService';
 import { portfolioApi } from '../services/api';
+import { StorageConfig } from '../types/api';
 
 const SUPPORTED_BROKERS = [
   { id: 12, name: 'Buenos Aires Valores S.A.' },
