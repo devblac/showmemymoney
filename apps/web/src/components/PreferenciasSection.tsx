@@ -111,7 +111,6 @@ export default function PreferenciasSection() {
         try {
           // Obtener el estado actual del backend
           const portfolio = await portfolioApi.getPortfolio();
-          const settings = await settingsApi.getSettings();
 
           // Guardar en localStorage
           localStorageService.saveState({
