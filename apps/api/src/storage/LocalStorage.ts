@@ -156,8 +156,8 @@ export class LocalStorage implements IStorage {
       window.localStorage.getItem(this.STORAGE_KEYS.HISTORICAL_QUOTES) || '[]'
     );
     const validQuotes = historicalQuotes
-      .filter(q => q.securityId === securityId && new Date(q.at) <= at)
-      .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+      .filter((q: Quote) => q.securityId === securityId && new Date(q.at) <= at)
+      .sort((a: Quote, b: Quote) => new Date(b.at).getTime() - new Date(a.at).getTime());
     return validQuotes[0] || null;
   }
 
