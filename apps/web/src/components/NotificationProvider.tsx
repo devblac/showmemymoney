@@ -46,9 +46,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         className="dark:bg-gray-800"
       >
-        <Alert 
-          onClose={handleClose} 
-          severity={notification.severity} 
+        <Alert
+          onClose={handleClose}
+          severity={notification.severity}
           sx={{ width: '100%' }}
           className="dark:bg-gray-700 dark:text-white"
         >

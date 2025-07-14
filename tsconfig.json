@@ -18,8 +18,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [],
-  "references": [
-    { "path": "./apps/web" },
-    { "path": "./apps/api" }
-  ]
+  "references": [{ "path": "./apps/web" }, { "path": "./apps/api" }]
 }

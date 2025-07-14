@@ -42,14 +42,22 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => 
           <TableRow>
             <TableCell className="dark:text-gray-200">Instrumento</TableCell>
             <TableCell className="dark:text-gray-200">Tipo</TableCell>
-            <TableCell align="right" className="dark:text-gray-200">Cantidad</TableCell>
-            <TableCell align="right" className="dark:text-gray-200">Precio unitario</TableCell>
-            <TableCell align="right" className="dark:text-gray-200">Valuación</TableCell>
-            <TableCell align="right" className="dark:text-gray-200">Acciones</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">
+              Cantidad
+            </TableCell>
+            <TableCell align="right" className="dark:text-gray-200">
+              Precio unitario
+            </TableCell>
+            <TableCell align="right" className="dark:text-gray-200">
+              Valuación
+            </TableCell>
+            <TableCell align="right" className="dark:text-gray-200">
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {positions.map((position) => (
+          {positions.map(position => (
             <TableRow key={position.security.id} className="dark:border-gray-700">
               <TableCell className="dark:text-gray-200">
                 <div>
@@ -62,19 +70,25 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => 
                 </div>
               </TableCell>
               <TableCell className="dark:text-gray-200">
-                <Chip 
-                  label={position.security.type} 
+                <Chip
+                  label={position.security.type}
                   size="small"
                   color={position.security.type === 'acción' ? 'primary' : 'secondary'}
                   className="dark:bg-gray-700"
                 />
               </TableCell>
-              <TableCell align="right" className="dark:text-gray-200">{position.quantity}</TableCell>
-              <TableCell align="right" className="dark:text-gray-200">${position.unitPrice.toLocaleString()}</TableCell>
-              <TableCell align="right" className="dark:text-gray-200">${position.valuation.toLocaleString()}</TableCell>
+              <TableCell align="right" className="dark:text-gray-200">
+                {position.quantity}
+              </TableCell>
+              <TableCell align="right" className="dark:text-gray-200">
+                ${position.unitPrice.toLocaleString()}
+              </TableCell>
+              <TableCell align="right" className="dark:text-gray-200">
+                ${position.valuation.toLocaleString()}
+              </TableCell>
               <TableCell align="right">
-                <Button 
-                  variant="outlined" 
+                <Button
+                  variant="outlined"
                   size="small"
                   onClick={() => handleOperateClick(position.security.id)}
                   className="dark:text-gray-200 dark:border-gray-600 hover:dark:border-gray-400"

@@ -6,22 +6,21 @@ import type {
   ValuationResponse,
   Settings,
   MarketDataConfig,
-  StorageConfig
+  StorageConfig,
 } from '../types/api';
 import { stateService } from './stateService';
 import { localStorageService } from './localStorageService';
 import { StorageType } from '../types/api';
-import type { CashAccount, Security, Position, Quote } from '../types/api';
 
 const api = axios.create({
   baseURL: 'http://localhost:3001/api',
-  withCredentials: true
+  withCredentials: true,
 });
 
 export const portfolioApi = {
   getPortfolio: async (): Promise<PortfolioDTO> => {
     const storageType = stateService.getCurrentStorageType();
-    
+
     if (storageType === StorageType.LOCAL_STORAGE) {
       const state = localStorageService.getState();
       // Calculamos la valuación total
@@ -41,13 +40,13 @@ export const portfolioApi = {
             security,
             quantity: pos.quantity,
             unitPrice: quote.price,
-            valuation: quote.price * pos.quantity
+            valuation: quote.price * pos.quantity,
           };
         }),
-        totalValuation
+        totalValuation,
       };
     }
-    
+
     // Si no, obtenemos del backend
     const response = await api.get<PortfolioDTO>('/portfolio');
     // Actualizamos el estado local si es necesario
@@ -55,17 +54,16 @@ export const portfolioApi = {
       cash: response.data.cash,
       securities: response.data.securities,
       positions: response.data.positions,
-      quotes: response.data.quotes
+      quotes: response.data.quotes,
     });
     return response.data;
   },
 
   transactBuy: async (request: TransactionRequest): Promise<void> => {
     const storageType = stateService.getCurrentStorageType();
-    
+
     if (storageType === StorageType.LOCAL_STORAGE) {
       const state = localStorageService.getState();
-      const security = state.securities.find(s => s.id === request.securityId)!;
       const quote = state.quotes.find(q => q.securityId === request.securityId)!;
       const cost = quote.price * request.quantity;
 
@@ -79,7 +77,7 @@ export const portfolioApi = {
       } else {
         state.positions.push({
           securityId: request.securityId,
-          quantity: request.quantity
+          quantity: request.quantity,
         });
       }
 
@@ -93,46 +91,46 @@ export const portfolioApi = {
 
   transactSell: async (request: TransactionRequest): Promise<void> => {
     const storageType = stateService.getCurrentStorageType();
-    
+
     if (storageType === StorageType.LOCAL_STORAGE) {
       const state = localStorageService.getState();
-      
+
       // Encontrar la posición existente
       const existingPosition = state.positions.find(p => p.securityId === request.securityId);
       if (!existingPosition) {
         throw new Error('No tienes posición en este activo');
       }
-      
+
       // Verificar que hay suficientes unidades para vender
       if (existingPosition.quantity < request.quantity) {
         throw new Error('No tienes suficientes unidades para vender');
       }
-      
+
       // Encontrar el precio actual
       const quote = state.quotes.find(q => q.securityId === request.securityId);
       if (!quote) {
         throw new Error('No se encontró cotización para este activo');
       }
-      
+
       // Calcular el valor de la venta
       const saleValue = quote.price * request.quantity;
-      
+
       // Actualizar cash
       state.cash.balance += saleValue;
-      
+
       // Actualizar posición
       existingPosition.quantity -= request.quantity;
-      
+
       // Si la cantidad llega a 0, eliminar la posición
       if (existingPosition.quantity === 0) {
         state.positions = state.positions.filter(p => p.securityId !== request.securityId);
       }
-      
+
       // Guardar el estado actualizado
       localStorageService.saveState(state);
       return;
     }
-    
+
     // Si no es localStorage, usar el backend
     await api.post('/transactions/sell', request);
     // Después de una venta, actualizamos el portfolio completo
@@ -148,7 +146,7 @@ export const portfolioApi = {
   getValuationAtDate: async (date: Date): Promise<ValuationResponse> => {
     const response = await api.get<ValuationResponse>(`/quotes/valuation?at=${date.toISOString()}`);
     return response.data;
-  }
+  },
 };
 
 export const settingsApi = {
@@ -174,5 +172,5 @@ export const settingsApi = {
     const response = await api.get('/settings/debug/snapshot');
     console.log('📊 InMemory Database Snapshot:', response.data);
     console.dir(response.data, { depth: null, colors: true });
-  }
+  },
 };

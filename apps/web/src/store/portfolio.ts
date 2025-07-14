@@ -8,7 +8,7 @@ interface PortfolioState {
   totalValuation: number;
   loading: boolean;
   error: string | null;
-  
+
   // Actions
   setPortfolio: (data: {
     cash: CashAccount;
@@ -21,24 +21,25 @@ interface PortfolioState {
   clearError: () => void;
 }
 
-export const usePortfolioStore = create<PortfolioState>((set) => ({
+export const usePortfolioStore = create<PortfolioState>(set => ({
   cash: null,
   positions: [],
   securities: [],
   totalValuation: 0,
   loading: false,
   error: null,
-  
-  setPortfolio: (data) => set({
-    cash: data.cash,
-    positions: data.positions,
-    securities: data.securities,
-    totalValuation: data.totalValuation,
-    loading: false,
-    error: null,
-  }),
-  
-  setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error, loading: false }),
+
+  setPortfolio: data =>
+    set({
+      cash: data.cash,
+      positions: data.positions,
+      securities: data.securities,
+      totalValuation: data.totalValuation,
+      loading: false,
+      error: null,
+    }),
+
+  setLoading: loading => set({ loading }),
+  setError: error => set({ error, loading: false }),
   clearError: () => set({ error: null }),
 }));

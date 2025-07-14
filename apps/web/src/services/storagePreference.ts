@@ -12,4 +12,4 @@ export const getStoragePreference = (): string => {
 
 export const setStoragePreference = (type: string): void => {
   localStorage.setItem(STORAGE_PREFERENCE_KEY, type);
-}; 
+};

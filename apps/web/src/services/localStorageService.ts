@@ -1,5 +1,5 @@
 import { StorageType } from '../types/api';
-import type { AppState, Settings, MarketDataConfig, PortfolioDTO } from '../types/api';
+import type { AppState } from '../types/api';
 
 const APP_STATE_KEY = 'smm_app_state';
 const STORAGE_PREFERENCE_KEY = 'smm_storage_preference';
@@ -17,13 +17,13 @@ export const localStorageService = {
         securities: state.securities,
         positions: state.positions.map(pos => ({
           securityId: pos.security.id,
-          quantity: pos.quantity
+          quantity: pos.quantity,
         })),
         quotes: state.positions.map(pos => ({
           securityId: pos.security.id,
           price: pos.unitPrice,
-          at: new Date()
-        }))
+          at: new Date(),
+        })),
       };
     } else {
       newState = { ...currentState, ...state };
@@ -44,8 +44,8 @@ export const localStorageService = {
         settings: {
           theme: 'light',
           storage: { type: StorageType.MEMORY },
-          marketData: { source: 'hardcoded' }
-        }
+          marketData: { source: 'hardcoded' },
+        },
       };
     }
     return JSON.parse(stateStr);
@@ -71,5 +71,5 @@ export const localStorageService = {
 
   setStoragePreference: (type: StorageType): void => {
     localStorage.setItem(STORAGE_PREFERENCE_KEY, type);
-  }
-}; 
+  },
+};

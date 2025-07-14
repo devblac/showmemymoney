@@ -25,7 +25,7 @@ const SUPPORTED_BROKERS = [
   { id: 209, name: 'Futuro Bursátil S.A.' },
   { id: 233, name: 'Sailing S.A.' },
   { id: 265, name: 'Negocios Financieros y Bursátiles S.A. (Cocos Capital)' },
-  { id: 284, name: 'Veta Capital S.A.' }
+  { id: 284, name: 'Veta Capital S.A.' },
 ];
 
 export default function PreferenciasSection() {
@@ -38,13 +38,15 @@ export default function PreferenciasSection() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   // Inicializamos con el valor de localStorage
-  const [storageType, setStorageType] = useState<StorageType>(localStorageService.getStoragePreference());
+  const [storageType, setStorageType] = useState<StorageType>(
+    localStorageService.getStoragePreference()
+  );
   const [postgresConfig, setPostgresConfig] = useState({
     host: 'localhost',
     port: 5432,
     database: 'showmemymoney',
     user: 'postgres',
-    password: ''
+    password: '',
   });
   const [copyToLocalStorage, setCopyToLocalStorage] = useState(true);
   const [showCopyOption, setShowCopyOption] = useState(false);
@@ -52,14 +54,13 @@ export default function PreferenciasSection() {
   // Efecto para controlar cuándo mostrar la opción de copia
   useEffect(() => {
     const currentStorage = localStorageService.getStoragePreference();
-    
+
     // Solo mostrar la opción cuando:
     // 1. Estamos actualmente en Memory
     // 2. El usuario ha seleccionado LocalStorage
     // 3. No hemos completado la transición aún
     setShowCopyOption(
-      currentStorage === StorageType.MEMORY && 
-      storageType === StorageType.LOCAL_STORAGE
+      currentStorage === StorageType.MEMORY && storageType === StorageType.LOCAL_STORAGE
     );
   }, [storageType]);
 
@@ -77,14 +78,15 @@ export default function PreferenciasSection() {
         setUser(settings.marketData.broker.user);
         setPassword(settings.marketData.broker.password);
       }
-      
+
       // Actualizamos el storage type solo si es diferente al de localStorage
       const localStoragePreference = localStorageService.getStoragePreference();
       if (settings.storage.type !== localStoragePreference) {
         // Si hay discrepancia, preferimos el valor de localStorage
         const storageConfig: StorageConfig = {
           type: localStoragePreference,
-          postgresql: localStoragePreference === StorageType.POSTGRESQL ? postgresConfig : undefined
+          postgresql:
+            localStoragePreference === StorageType.POSTGRESQL ? postgresConfig : undefined,
         };
         await settingsApi.updateStorageConfig(storageConfig);
       }
@@ -102,7 +104,7 @@ export default function PreferenciasSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       // Si estamos cambiando a localStorage y el usuario quiere copiar los datos
       if (storageType === StorageType.LOCAL_STORAGE && copyToLocalStorage) {
@@ -110,7 +112,7 @@ export default function PreferenciasSection() {
           // Obtener el estado actual del backend
           const portfolio = await portfolioApi.getPortfolio();
           const settings = await settingsApi.getSettings();
-          
+
           // Guardar en localStorage
           localStorageService.saveState({
             ...portfolio,
@@ -119,14 +121,16 @@ export default function PreferenciasSection() {
               storage: { type: StorageType.LOCAL_STORAGE },
               marketData: {
                 source: isOnline ? 'online' : 'hardcoded',
-                broker: isOnline ? {
-                  id: Number(selectedBroker),
-                  dni,
-                  user,
-                  password
-                } : undefined
-              }
-            }
+                broker: isOnline
+                  ? {
+                      id: Number(selectedBroker),
+                      dni,
+                      user,
+                      password,
+                    }
+                  : undefined,
+              },
+            },
           });
           console.log('Estado copiado a localStorage');
         } catch (error) {
@@ -138,17 +142,19 @@ export default function PreferenciasSection() {
       // Actualizar configuraciones
       const marketDataConfig: MarketDataConfig = {
         source: isOnline ? 'online' : 'hardcoded',
-        broker: isOnline ? {
-          id: Number(selectedBroker),
-          dni,
-          user,
-          password
-        } : undefined
+        broker: isOnline
+          ? {
+              id: Number(selectedBroker),
+              dni,
+              user,
+              password,
+            }
+          : undefined,
       };
 
       const storageConfig: StorageConfig = {
         type: storageType,
-        postgresql: storageType === StorageType.POSTGRESQL ? postgresConfig : undefined
+        postgresql: storageType === StorageType.POSTGRESQL ? postgresConfig : undefined,
       };
 
       // Primero actualizamos la preferencia de almacenamiento local
@@ -157,14 +163,17 @@ export default function PreferenciasSection() {
       // Luego actualizamos las configuraciones en el backend
       await settingsApi.updateMarketDataConfig(marketDataConfig);
       await settingsApi.updateStorageConfig(storageConfig);
-      
+
       // Después de guardar exitosamente, ocultamos la opción de copia
       setShowCopyOption(false);
-      
+
       showNotification('Preferencias actualizadas con éxito', 'success');
     } catch (error) {
       console.error('Error en handleSubmit:', error);
-      showNotification(error instanceof Error ? error.message : 'Error al actualizar las preferencias', 'error');
+      showNotification(
+        error instanceof Error ? error.message : 'Error al actualizar las preferencias',
+        'error'
+      );
     }
   };
 
@@ -190,7 +199,7 @@ export default function PreferenciasSection() {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6 dark:text-white">Preferencias</h2>
-      
+
       <form onSubmit={handleSubmit} className="max-w-lg space-y-6">
         {/* 1. Sección de Tema */}
         <div className="mb-6">
@@ -220,7 +229,7 @@ export default function PreferenciasSection() {
           <div className="mt-2">
             <select
               value={storageType}
-              onChange={(e) => setStorageType(e.target.value as StorageType)}
+              onChange={e => setStorageType(e.target.value as StorageType)}
               className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
             >
               <option value="memory">En memoria (temporal)</option>
@@ -238,16 +247,20 @@ export default function PreferenciasSection() {
                   type="checkbox"
                   id="copyToLocalStorage"
                   checked={copyToLocalStorage}
-                  onChange={(e) => setCopyToLocalStorage(e.target.checked)}
+                  onChange={e => setCopyToLocalStorage(e.target.checked)}
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"
                 />
-                <label htmlFor="copyToLocalStorage" className="ml-2 block text-sm text-gray-900 dark:text-gray-200">
+                <label
+                  htmlFor="copyToLocalStorage"
+                  className="ml-2 block text-sm text-gray-900 dark:text-gray-200"
+                >
                   Copiar datos actuales a Local Storage
                 </label>
               </div>
               {localStorageService.hasState() && (
                 <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">
-                  ⚠️ Ya existen datos en Local Storage. Si copias los datos actuales, se sobrescribirán los existentes.
+                  ⚠️ Ya existen datos en Local Storage. Si copias los datos actuales, se
+                  sobrescribirán los existentes.
                 </p>
               )}
               {!localStorageService.hasState() && !copyToLocalStorage && (
@@ -262,11 +275,13 @@ export default function PreferenciasSection() {
           {storageType === StorageType.POSTGRESQL && (
             <div className="mt-4 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Host</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                  Host
+                </label>
                 <input
                   type="text"
                   value={postgresConfig.host}
-                  onChange={(e) => setPostgresConfig({...postgresConfig, host: e.target.value})}
+                  onChange={e => setPostgresConfig({ ...postgresConfig, host: e.target.value })}
                   className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
                 />
               </div>
@@ -303,45 +318,55 @@ export default function PreferenciasSection() {
 
               <div className="space-y-4 mt-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Broker</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                    Broker
+                  </label>
                   <select
                     value={selectedBroker}
-                    onChange={(e) => setSelectedBroker(e.target.value ? Number(e.target.value) : '')}
+                    onChange={e => setSelectedBroker(e.target.value ? Number(e.target.value) : '')}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
                   >
                     <option value="">Seleccione un broker</option>
                     {SUPPORTED_BROKERS.map(broker => (
-                      <option key={broker.id} value={broker.id}>{broker.name}</option>
+                      <option key={broker.id} value={broker.id}>
+                        {broker.name}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">DNI</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                    DNI
+                  </label>
                   <input
                     type="text"
                     value={dni}
-                    onChange={(e) => setDni(e.target.value)}
+                    onChange={e => setDni(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Usuario</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                    Usuario
+                  </label>
                   <input
                     type="text"
                     value={user}
-                    onChange={(e) => setUser(e.target.value)}
+                    onChange={e => setUser(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Contraseña</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                    Contraseña
+                  </label>
                   <input
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:text-white sm:text-sm"
                   />
                 </div>
@@ -369,4 +394,4 @@ export default function PreferenciasSection() {
       </form>
     </div>
   );
-} 
+}

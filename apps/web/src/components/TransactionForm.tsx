@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-  Box,
-  Alert,
-} from '@mui/material';
+import { Card, CardContent, Typography, TextField, Button, Box, Alert } from '@mui/material';
 import { Security } from '../types/api';
 import { ExtendedPosition } from '../types/portfolio';
 import { useTransactions } from '../hooks/useTransactions';
@@ -55,7 +47,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         <Typography variant="h6" gutterBottom className="text-gray-900 dark:text-white">
           Operar {security.symbol}
         </Typography>
-        
+
         <Box sx={{ mb: 3 }}>
           <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
             Precio actual: ${currentPrice.toLocaleString()}
@@ -72,16 +64,16 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           label="Cantidad"
           type="number"
           value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
+          onChange={e => setQuantity(Number(e.target.value))}
           inputProps={{ min: 1 }}
           fullWidth
           sx={{ mb: 2 }}
           className="dark:bg-gray-700"
           InputProps={{
-            className: "dark:text-white",
+            className: 'dark:text-white',
           }}
           InputLabelProps={{
-            className: "dark:text-gray-300"
+            className: 'dark:text-gray-300',
           }}
         />
 
@@ -95,13 +87,21 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         </Box>
 
         {!canBuy && quantity > 0 && (
-          <Alert severity="warning" sx={{ mb: 2 }} className="dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800">
+          <Alert
+            severity="warning"
+            sx={{ mb: 2 }}
+            className="dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800"
+          >
             Fondos insuficientes. Máximo que puedes comprar: {maxBuy} títulos
           </Alert>
         )}
 
         {!canSell && quantity > maxSell && (
-          <Alert severity="warning" sx={{ mb: 2 }} className="dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800">
+          <Alert
+            severity="warning"
+            sx={{ mb: 2 }}
+            className="dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800"
+          >
             Títulos insuficientes. Máximo que puedes vender: {maxSell} títulos
           </Alert>
         )}

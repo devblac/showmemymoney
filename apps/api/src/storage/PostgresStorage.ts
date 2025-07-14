@@ -7,24 +7,26 @@ import {
   PortfolioDTO,
   ValuationResponse,
   Settings,
-  MarketDataConfig
+  MarketDataConfig,
 } from '../models/types.js';
 import { IStorage } from './IStorage.js';
+
+interface PostgresConfig {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+}
 
 export class PostgresStorage implements IStorage {
   private pool: Pool | null = null;
 
-  constructor(config: {
-    host: string;
-    port: number;
-    database: string;
-    user: string;
-    password: string;
-  }) {
+  constructor(config: PostgresConfig) {
     this.initializePool(config);
   }
 
-  private async initializePool(config: any) {
+  private async initializePool(config: PostgresConfig) {
     try {
       const { Pool } = await import('pg');
       this.pool = new Pool(config);
@@ -112,4 +114,4 @@ export class PostgresStorage implements IStorage {
   async getValuationAtDate(at: Date): Promise<ValuationResponse> {
     throw new Error('Not implemented');
   }
-} 
+}

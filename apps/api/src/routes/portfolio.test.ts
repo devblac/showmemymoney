@@ -12,9 +12,7 @@ describe('Portfolio API', () => {
 
   describe('GET /api/portfolio', () => {
     it('should return portfolio data', async () => {
-      const response = await request(app)
-        .get('/api/portfolio')
-        .expect(200);
+      const response = await request(app).get('/api/portfolio').expect(200);
 
       expect(response.body).toHaveProperty('cash');
       expect(response.body).toHaveProperty('positions');

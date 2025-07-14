@@ -1,23 +1,18 @@
 import React from 'react';
-import { 
-  Typography, 
-  Box, 
-  Grid, 
-  Paper, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
+import {
+  Typography,
+  Box,
+  Grid,
+  Paper,
+  List,
+  ListItem,
+  ListItemIcon,
   ListItemText,
-  Divider 
+  Divider,
 } from '@mui/material';
 import { AccountBalance, TrendingUp, AttachMoney } from '@mui/icons-material';
 import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, TooltipItem } from 'chart.js';
 import { CashAccount } from '../types/api';
 import { ExtendedPosition } from '../types/portfolio';
 import { PositionsTable } from './PositionsTable';
@@ -42,16 +37,10 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
 
   // Create a comprehensive pie chart with cash + all individual positions
   const portfolioData = {
-    labels: [
-      'Efectivo disponible',
-      ...positions.map(pos => pos.security.symbol)
-    ],
+    labels: ['Efectivo disponible', ...positions.map(pos => pos.security.symbol)],
     datasets: [
       {
-        data: [
-          cash.balance,
-          ...positions.map(pos => pos.valuation)
-        ],
+        data: [cash.balance, ...positions.map(pos => pos.valuation)],
         backgroundColor: [
           '#1976d2', // Primary blue for cash (first)
           '#ff6384', // Red
@@ -61,7 +50,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
           '#9966ff', // Purple
           '#ff9f40', // Orange
           '#ff6384', // Pink
-          '#c9cbcf'  // Gray
+          '#c9cbcf', // Gray
         ],
         borderWidth: 2,
         borderColor: theme === 'dark' ? '#1f2937' : '#ffffff',
@@ -80,36 +69,47 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
           usePointStyle: true,
           color: theme === 'dark' ? '#e5e7eb' : '#111827',
           font: {
-            size: 11
+            size: 11,
           },
-          boxWidth: 12
+          boxWidth: 12,
         },
       },
       tooltip: {
         callbacks: {
-          label: function(context: any) {
+          label: function(context: TooltipItem<'pie'>) {
             const label = context.label || '';
             const value = context.parsed;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
             const percentage = ((value / total) * 100).toFixed(1);
             return `${label}: $${value.toLocaleString()} (${percentage}%)`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
   };
 
   return (
     <Box>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }} className="dark:text-white">
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mb: 3 }}
+        className="dark:text-white"
+      >
         Posición consolidada
       </Typography>
-      
+
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {/* Left side - Summary list */}
         <Grid item xs={12} md={5}>
           <Paper sx={{ p: 1.5, height: 280 }} className="dark:bg-gray-800">
-            <Typography variant="h6" gutterBottom sx={{ mb: 0.5, fontSize: '1.1rem' }} className="dark:text-white">
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ mb: 0.5, fontSize: '1.1rem' }}
+              className="dark:text-white"
+            >
               Resumen del patrimonio
             </Typography>
             <List dense sx={{ pt: 0 }}>
@@ -130,9 +130,9 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                   }
                 />
               </ListItem>
-              
+
               <Divider sx={{ my: 0.25 }} className="dark:border-gray-700" />
-              
+
               <ListItem sx={{ py: 0.5, px: 0 }}>
                 <ListItemIcon sx={{ minWidth: 35 }}>
                   <TrendingUp sx={{ color: 'secondary.main', fontSize: '1.2rem' }} />
@@ -150,9 +150,9 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                   }
                 />
               </ListItem>
-              
+
               <Divider sx={{ my: 0.25 }} className="dark:border-gray-700" />
-              
+
               <ListItem sx={{ py: 0.5, px: 0 }}>
                 <ListItemIcon sx={{ minWidth: 35 }}>
                   <AccountBalance sx={{ color: 'success.main', fontSize: '1.2rem' }} />
@@ -173,11 +173,17 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
             </List>
           </Paper>
         </Grid>
-        
+
         {/* Right side - Single comprehensive chart */}
         <Grid item xs={12} md={7}>
           <Paper sx={{ p: 1.5, height: 280, overflow: 'hidden' }} className="dark:bg-gray-800">
-            <Typography variant="h6" gutterBottom align="center" sx={{ mb: 0.5, fontSize: '1.1rem' }} className="dark:text-white">
+            <Typography
+              variant="h6"
+              gutterBottom
+              align="center"
+              sx={{ mb: 0.5, fontSize: '1.1rem' }}
+              className="dark:text-white"
+            >
               Composición del patrimonio
             </Typography>
             <Box sx={{ height: 220, position: 'relative', width: '100%' }}>
@@ -186,9 +192,9 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
           </Paper>
         </Grid>
       </Grid>
-      
+
       <Divider sx={{ my: 2 }} className="dark:border-gray-700" />
-      
+
       {/* Positions Table */}
       <Typography variant="h6" gutterBottom sx={{ mb: 1.5, mt: 2 }} className="dark:text-white">
         Mis posiciones
@@ -196,4 +202,4 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
       <PositionsTable positions={positions} />
     </Box>
   );
-}; 
+};

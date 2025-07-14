@@ -32,11 +32,13 @@ export const SecuritiesTable: React.FC<SecuritiesTableProps> = ({ securities }) 
           <TableRow>
             <TableCell className="dark:text-gray-200">Instrumento</TableCell>
             <TableCell className="dark:text-gray-200">Tipo</TableCell>
-            <TableCell align="right" className="dark:text-gray-200">Acciones</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {securities.map((security) => (
+          {securities.map(security => (
             <TableRow key={security.id} hover className="dark:border-gray-700">
               <TableCell className="dark:text-gray-200">
                 <div>
@@ -49,16 +51,16 @@ export const SecuritiesTable: React.FC<SecuritiesTableProps> = ({ securities }) 
                 </div>
               </TableCell>
               <TableCell className="dark:text-gray-200">
-                <Chip 
-                  label={security.type} 
+                <Chip
+                  label={security.type}
                   size="small"
                   color={security.type === 'acción' ? 'primary' : 'secondary'}
                   className="dark:bg-gray-700"
                 />
               </TableCell>
               <TableCell align="right">
-                <Button 
-                  variant="outlined" 
+                <Button
+                  variant="outlined"
                   size="small"
                   onClick={() => handleSecurityClick(security.id)}
                   className="dark:text-gray-200 dark:border-gray-600 hover:dark:border-gray-400"

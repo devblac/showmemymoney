@@ -21,7 +21,8 @@ export function Dashboard() {
     return (
       <Box sx={{ p: 2 }}>
         <div className="text-red-600 dark:text-red-400">
-          Error al cargar el portafolio: {error instanceof Error ? error.message : 'Error desconocido'}
+          Error al cargar el portafolio:{' '}
+          {error instanceof Error ? error.message : 'Error desconocido'}
         </div>
       </Box>
     );
@@ -30,7 +31,9 @@ export function Dashboard() {
   if (!portfolio) {
     return (
       <Box sx={{ p: 2 }}>
-        <div className="text-gray-600 dark:text-gray-300">No hay datos del portafolio disponibles</div>
+        <div className="text-gray-600 dark:text-gray-300">
+          No hay datos del portafolio disponibles
+        </div>
       </Box>
     );
   }
@@ -42,31 +45,25 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
       <NavigationMenu onSectionChange={handleSectionChange} />
-      
+
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <Routes>
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
-              <PosicionConsolidada 
-                cash={portfolio.cash} 
+              <PosicionConsolidada
+                cash={portfolio.cash}
                 positions={portfolio.positions}
                 totalValuation={portfolio.totalValuation}
               />
-            } 
+            }
           />
-          <Route 
-            path="/inversiones" 
-            element={<InversionesSection securities={portfolio.securities} />} 
+          <Route
+            path="/inversiones"
+            element={<InversionesSection securities={portfolio.securities} />}
           />
-          <Route 
-            path="/preferencias" 
-            element={<PreferenciasSection />} 
-          />
-          <Route 
-            path="/security/:id" 
-            element={<SecurityDetail />} 
-          />
+          <Route path="/preferencias" element={<PreferenciasSection />} />
+          <Route path="/security/:id" element={<SecurityDetail />} />
         </Routes>
       </main>
     </div>

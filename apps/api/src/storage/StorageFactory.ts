@@ -26,4 +26,4 @@ export class StorageFactory {
       return new InMemoryStorage();
     }
   }
-} 
+}

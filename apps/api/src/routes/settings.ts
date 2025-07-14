@@ -4,40 +4,54 @@ import { StorageFactory } from '../storage/StorageFactory.js';
 import { z } from 'zod';
 import { LocalStorage } from '../storage/LocalStorage.js';
 
-const MarketDataConfigSchema = z.object({
-  source: z.enum(['hardcoded', 'online']),
-  broker: z.object({
-    id: z.number(),
-    dni: z.string(),
-    user: z.string(),
-    password: z.string()
-  }).optional()
-}).refine(data => {
-  if (data.source === 'online' && !data.broker) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Broker configuration is required when using online data source"
-});
+const MarketDataConfigSchema = z
+  .object({
+    source: z.enum(['hardcoded', 'online']),
+    broker: z
+      .object({
+        id: z.number(),
+        dni: z.string(),
+        user: z.string(),
+        password: z.string(),
+      })
+      .optional(),
+  })
+  .refine(
+    data => {
+      if (data.source === 'online' && !data.broker) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Broker configuration is required when using online data source',
+    }
+  );
 
-const StorageConfigSchema = z.object({
-  type: z.enum(['memory', 'localStorage', 'postgresql']),
-  postgresql: z.object({
-    host: z.string(),
-    port: z.number(),
-    database: z.string(),
-    user: z.string(),
-    password: z.string()
-  }).optional()
-}).refine(data => {
-  if (data.type === 'postgresql' && !data.postgresql) {
-    return false;
-  }
-  return true;
-}, {
-  message: "PostgreSQL configuration is required when using postgresql storage"
-});
+const StorageConfigSchema = z
+  .object({
+    type: z.enum(['memory', 'localStorage', 'postgresql']),
+    postgresql: z
+      .object({
+        host: z.string(),
+        port: z.number(),
+        database: z.string(),
+        user: z.string(),
+        password: z.string(),
+      })
+      .optional(),
+  })
+  .refine(
+    data => {
+      if (data.type === 'postgresql' && !data.postgresql) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'PostgreSQL configuration is required when using postgresql storage',
+    }
+  );
 
 export function createSettingsRouter(storage: IStorage): Router {
   const router = Router();
@@ -75,7 +89,7 @@ export function createSettingsRouter(storage: IStorage): Router {
   router.patch('/storage', async (req, res) => {
     try {
       const config = StorageConfigSchema.parse(req.body);
-      
+
       // Update storage type in settings
       const currentSettings = await storage.getSettings();
       currentSettings.storage = config;
@@ -103,8 +117,8 @@ export function createSettingsRouter(storage: IStorage): Router {
           positions: await storage.getPositions(),
           quotes: await storage.getQuotes(),
           settings: await storage.getSettings(),
-          portfolio: await storage.getPortfolioValue()
-        }
+          portfolio: await storage.getPortfolioValue(),
+        },
       };
 
       if (storage instanceof LocalStorage) {
@@ -113,7 +127,7 @@ export function createSettingsRouter(storage: IStorage): Router {
       } else {
         console.log('🔍 Storage Type: InMemory');
       }
-      
+
       res.json(snapshot);
     } catch (error) {
       console.error('Error getting snapshot:', error);
@@ -126,4 +140,4 @@ export function createSettingsRouter(storage: IStorage): Router {
   });
 
   return router;
-} 
+}

@@ -60,7 +60,7 @@ export interface MarketDataConfig {
 export enum StorageType {
   MEMORY = 'memory',
   LOCAL_STORAGE = 'localStorage',
-  POSTGRESQL = 'postgresql'
+  POSTGRESQL = 'postgresql',
 }
 
 export interface PostgresConfig {

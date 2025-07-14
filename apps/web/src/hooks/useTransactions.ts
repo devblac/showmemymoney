@@ -13,7 +13,7 @@ export const useTransactions = () => {
       queryClient.invalidateQueries({ queryKey: ['portfolio'] });
       showNotification('Compra realizada con éxito', 'success');
     },
-    onError: (error) => {
+    onError: error => {
       showNotification(error instanceof Error ? error.message : 'Error en la compra', 'error');
     },
   });
@@ -24,7 +24,7 @@ export const useTransactions = () => {
       queryClient.invalidateQueries({ queryKey: ['portfolio'] });
       showNotification('Venta realizada con éxito', 'success');
     },
-    onError: (error) => {
+    onError: error => {
       showNotification(error instanceof Error ? error.message : 'Error en la venta', 'error');
     },
   });

@@ -16,16 +16,18 @@ declare global {
 }
 
 const defaultStorageConfig = {
-  type: StorageType.MEMORY
+  type: StorageType.MEMORY,
 };
 
 export function createServer(storage: IStorage) {
   const app = express();
 
-  app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-  }));
+  app.use(
+    cors({
+      origin: 'http://localhost:5173',
+      credentials: true,
+    })
+  );
   app.use(express.json());
 
   app.use('/api/portfolio', createPortfolioRouter(storage));
@@ -36,10 +38,10 @@ export function createServer(storage: IStorage) {
 
   // Health check that includes storage type
   app.get('/health', (req, res) => {
-    res.json({ 
-      status: 'ok', 
+    res.json({
+      status: 'ok',
       timestamp: new Date().toISOString(),
-      storageType: storage.constructor.name
+      storageType: storage.constructor.name,
     });
   });
 
@@ -59,13 +61,13 @@ export function createServer(storage: IStorage) {
 
 export function startServer() {
   const PORT = process.env.PORT || 3001;
-  
+
   // Get storage preference from environment or default to memory
   const storageType = process.env.STORAGE_TYPE || 'memory';
   const storage = StorageFactory.createStorage({ type: storageType as StorageType });
-  
+
   const app = createServer(storage);
-  
+
   app.listen(PORT, () => {
     console.log(`Servidor ejecutándose en el puerto ${PORT}`);
     console.log(`Tipo de almacenamiento: ${storage.constructor.name}`);

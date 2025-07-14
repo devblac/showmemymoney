@@ -1,14 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { 
-  Typography, 
-  Box, 
-  Button, 
-  Grid, 
-  Card, 
-  CardContent,
-  Chip,
-} from '@mui/material';
+import { Typography, Box, Button, Grid, Card, CardContent, Chip } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { usePortfolio } from '../hooks/usePortfolio';
 import { TransactionForm } from '../components/TransactionForm';
@@ -39,7 +31,8 @@ const SecurityDetail: React.FC = () => {
     return (
       <Box sx={{ p: 2 }}>
         <Typography className="text-red-600 dark:text-red-400">
-          Error al cargar el portafolio: {error instanceof Error ? error.message : 'Error desconocido'}
+          Error al cargar el portafolio:{' '}
+          {error instanceof Error ? error.message : 'Error desconocido'}
         </Typography>
       </Box>
     );
@@ -48,7 +41,9 @@ const SecurityDetail: React.FC = () => {
   if (!portfolio || !id) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography className="text-gray-600 dark:text-gray-300">Instrumento no encontrado</Typography>
+        <Typography className="text-gray-600 dark:text-gray-300">
+          Instrumento no encontrado
+        </Typography>
       </Box>
     );
   }
@@ -59,7 +54,9 @@ const SecurityDetail: React.FC = () => {
   if (!security) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography className="text-gray-600 dark:text-gray-300">Instrumento no encontrado</Typography>
+        <Typography className="text-gray-600 dark:text-gray-300">
+          Instrumento no encontrado
+        </Typography>
       </Box>
     );
   }
@@ -88,7 +85,7 @@ const SecurityDetail: React.FC = () => {
               <Typography variant="h6" gutterBottom className="text-gray-900 dark:text-white">
                 Información del instrumento
               </Typography>
-              
+
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Nombre
@@ -102,14 +99,14 @@ const SecurityDetail: React.FC = () => {
                 <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Tipo
                 </Typography>
-                <Chip 
-                  label={security.type} 
+                <Chip
+                  label={security.type}
                   color={security.type === 'acción' ? 'primary' : 'secondary'}
                   size="small"
                   className="dark:bg-gray-700 dark:text-white"
                 />
               </Box>
-              
+
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Precio actual
@@ -118,7 +115,7 @@ const SecurityDetail: React.FC = () => {
                   ${currentPrice.toLocaleString()}
                 </Typography>
               </Box>
-              
+
               {position && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
@@ -135,7 +132,7 @@ const SecurityDetail: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        
+
         <Grid item xs={12} md={6}>
           <TransactionForm
             security={security}

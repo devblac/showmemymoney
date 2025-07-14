@@ -61,4 +61,4 @@ export function NavigationMenu({ currentSection, onSectionChange }: NavigationMe
       </div>
     </nav>
   );
-} 
+}

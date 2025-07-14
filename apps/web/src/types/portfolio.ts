@@ -5,4 +5,4 @@ export interface ExtendedPosition {
   quantity: number;
   unitPrice: number;
   valuation: number;
-} 
+}

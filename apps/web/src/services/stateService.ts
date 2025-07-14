@@ -15,11 +15,11 @@ export const stateService = {
     settings?: Settings;
   }) => {
     const storageType = stateService.getCurrentStorageType();
-    
+
     if (storageType === StorageType.LOCAL_STORAGE) {
       // Si es localStorage, actualizamos directamente
       localStorageService.saveState(updates);
     }
     // Si es MEMORY o POSTGRESQL, el backend ya se encarga de persistir los cambios
-  }
-}; 
+  },
+};

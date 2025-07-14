@@ -6,7 +6,7 @@ import {
   PortfolioDTO,
   ValuationResponse,
   Settings,
-  MarketDataConfig
+  MarketDataConfig,
 } from '../models/types.js';
 import { IStorage } from './IStorage.js';
 
@@ -18,8 +18,8 @@ export class InMemoryStorage implements IStorage {
   private historicalQuotes: Quote[] = [];
   private settings: Settings = {
     marketData: {
-      source: 'hardcoded'
-    }
+      source: 'hardcoded',
+    },
   };
 
   constructor() {
@@ -110,7 +110,7 @@ export class InMemoryStorage implements IStorage {
     } else {
       this.quotes.push({ ...quote });
     }
-    
+
     // Store in historical quotes
     this.historicalQuotes.push({ ...quote });
   }
@@ -128,16 +128,18 @@ export class InMemoryStorage implements IStorage {
     const cash = await this.getCashAccount();
     const positions = await this.getPositions();
     const securities = await this.getSecurities();
-    
+
     const positionDetails = await Promise.all(
-      positions.map(async (position) => {
+      positions.map(async position => {
         const security = securities.find(s => s.id === position.securityId);
         const quote = await this.getQuoteBySecurityId(position.securityId);
-        
+
         if (!security || !quote) {
-          throw new Error(`Instrumento o cotización no encontrada para la posición ${position.securityId}`);
+          throw new Error(
+            `Instrumento o cotización no encontrada para la posición ${position.securityId}`
+          );
         }
-        
+
         return {
           security,
           quantity: position.quantity,
@@ -147,7 +149,8 @@ export class InMemoryStorage implements IStorage {
       })
     );
 
-    const totalValuation = cash.balance + positionDetails.reduce((sum, pos) => sum + pos.valuation, 0);
+    const totalValuation =
+      cash.balance + positionDetails.reduce((sum, pos) => sum + pos.valuation, 0);
 
     return {
       cash,
@@ -232,10 +235,10 @@ export class InMemoryStorage implements IStorage {
   async getValuationAtDate(at: Date): Promise<ValuationResponse> {
     const positions = await this.getPositions();
     const cash = await this.getCashAccount();
-    
+
     // Calculate historical valuation
     const positionsValue = await Promise.all(
-      positions.map(async (position) => {
+      positions.map(async position => {
         const quote = await this.getQuoteBySecurityIdAndDate(position.securityId, at);
         if (!quote) return 0;
         return position.quantity * quote.price;
@@ -261,4 +264,4 @@ export class InMemoryStorage implements IStorage {
   async updateMarketDataConfig(config: MarketDataConfig): Promise<void> {
     this.settings.marketData = { ...config };
   }
-};
+}

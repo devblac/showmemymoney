@@ -6,7 +6,7 @@ import {
   PortfolioDTO,
   ValuationResponse,
   Settings,
-  MarketDataConfig
+  MarketDataConfig,
 } from '../models/types.js';
 import { IStorage } from './IStorage.js';
 
@@ -17,7 +17,7 @@ export class LocalStorage implements IStorage {
     POSITIONS: 'smm_positions',
     QUOTES: 'smm_quotes',
     HISTORICAL_QUOTES: 'smm_historical_quotes',
-    SETTINGS: 'smm_settings'
+    SETTINGS: 'smm_settings',
   };
 
   constructor() {
@@ -56,14 +56,17 @@ export class LocalStorage implements IStorage {
         { securityId: '4', price: 380.0, at: now },
       ];
       window.localStorage.setItem(this.STORAGE_KEYS.QUOTES, JSON.stringify(defaultQuotes));
-      window.localStorage.setItem(this.STORAGE_KEYS.HISTORICAL_QUOTES, JSON.stringify(defaultQuotes));
+      window.localStorage.setItem(
+        this.STORAGE_KEYS.HISTORICAL_QUOTES,
+        JSON.stringify(defaultQuotes)
+      );
     }
 
     if (!window.localStorage.getItem(this.STORAGE_KEYS.SETTINGS)) {
       const defaultSettings = {
         marketData: {
-          source: 'hardcoded'
-        }
+          source: 'hardcoded',
+        },
       };
       window.localStorage.setItem(this.STORAGE_KEYS.SETTINGS, JSON.stringify(defaultSettings));
     }
@@ -136,15 +139,22 @@ export class LocalStorage implements IStorage {
       quotes.push(quote);
     }
     window.localStorage.setItem(this.STORAGE_KEYS.QUOTES, JSON.stringify(quotes));
-    
+
     // Update historical quotes
-    const historicalQuotes = JSON.parse(window.localStorage.getItem(this.STORAGE_KEYS.HISTORICAL_QUOTES) || '[]');
+    const historicalQuotes = JSON.parse(
+      window.localStorage.getItem(this.STORAGE_KEYS.HISTORICAL_QUOTES) || '[]'
+    );
     historicalQuotes.push(quote);
-    window.localStorage.setItem(this.STORAGE_KEYS.HISTORICAL_QUOTES, JSON.stringify(historicalQuotes));
+    window.localStorage.setItem(
+      this.STORAGE_KEYS.HISTORICAL_QUOTES,
+      JSON.stringify(historicalQuotes)
+    );
   }
 
   async getQuoteBySecurityIdAndDate(securityId: string, at: Date): Promise<Quote | null> {
-    const historicalQuotes = JSON.parse(window.localStorage.getItem(this.STORAGE_KEYS.HISTORICAL_QUOTES) || '[]');
+    const historicalQuotes = JSON.parse(
+      window.localStorage.getItem(this.STORAGE_KEYS.HISTORICAL_QUOTES) || '[]'
+    );
     const validQuotes = historicalQuotes
       .filter(q => q.securityId === securityId && new Date(q.at) <= at)
       .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
@@ -152,7 +162,10 @@ export class LocalStorage implements IStorage {
   }
 
   async getSettings(): Promise<Settings> {
-    return JSON.parse(window.localStorage.getItem(this.STORAGE_KEYS.SETTINGS) || '{"marketData":{"source":"hardcoded"}}');
+    return JSON.parse(
+      window.localStorage.getItem(this.STORAGE_KEYS.SETTINGS) ||
+        '{"marketData":{"source":"hardcoded"}}'
+    );
   }
 
   async updateSettings(settings: Settings): Promise<void> {
@@ -169,18 +182,18 @@ export class LocalStorage implements IStorage {
     const [cash, positions, securities] = await Promise.all([
       this.getCashAccount(),
       this.getPositions(),
-      this.getSecurities()
+      this.getSecurities(),
     ]);
-    
+
     const positionDetails = await Promise.all(
-      positions.map(async (position) => {
+      positions.map(async position => {
         const security = securities.find(s => s.id === position.securityId);
         const quote = await this.getQuoteBySecurityId(position.securityId);
-        
+
         if (!security || !quote) {
           throw new Error(`Security or quote not found for position ${position.securityId}`);
         }
-        
+
         return {
           security,
           quantity: position.quantity,
@@ -190,7 +203,8 @@ export class LocalStorage implements IStorage {
       })
     );
 
-    const totalValuation = cash.balance + positionDetails.reduce((sum, pos) => sum + pos.valuation, 0);
+    const totalValuation =
+      cash.balance + positionDetails.reduce((sum, pos) => sum + pos.valuation, 0);
 
     return {
       cash,
@@ -201,13 +215,10 @@ export class LocalStorage implements IStorage {
   }
 
   async getValuationAtDate(at: Date): Promise<ValuationResponse> {
-    const [positions, cash] = await Promise.all([
-      this.getPositions(),
-      this.getCashAccount()
-    ]);
-    
+    const [positions, cash] = await Promise.all([this.getPositions(), this.getCashAccount()]);
+
     const positionsValue = await Promise.all(
-      positions.map(async (position) => {
+      positions.map(async position => {
         const quote = await this.getQuoteBySecurityIdAndDate(position.securityId, at);
         if (!quote) return 0;
         return position.quantity * quote.price;
@@ -230,7 +241,7 @@ export class LocalStorage implements IStorage {
       positions: await this.getPositions(),
       quotes: await this.getQuotes(),
       settings: await this.getSettings(),
-      portfolio: await this.getPortfolioValue()
+      portfolio: await this.getPortfolioValue(),
     };
 
     console.group('📦 Local Storage Database State');
@@ -239,4 +250,4 @@ export class LocalStorage implements IStorage {
     });
     console.groupEnd();
   }
-} 
+}

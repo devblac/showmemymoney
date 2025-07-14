@@ -23,21 +23,17 @@ export function createQuotesRouter(storage: IStorage): Router {
 
   // Bulk update quotes
   const BulkQuoteUpdateSchema = z.array(QuoteUpdateRequestSchema);
-  
+
   router.patch('/bulk', async (req, res) => {
     try {
       const quotes = BulkQuoteUpdateSchema.parse(req.body);
       const now = new Date();
-      
-      await Promise.all(
-        quotes.map(quote => 
-          storage.updateQuote({ ...quote, at: now })
-        )
-      );
-      
-      res.json({ 
-        success: true, 
-        message: `${quotes.length} cotizaciones actualizadas con éxito` 
+
+      await Promise.all(quotes.map(quote => storage.updateQuote({ ...quote, at: now })));
+
+      res.json({
+        success: true,
+        message: `${quotes.length} cotizaciones actualizadas con éxito`,
       });
     } catch (error) {
       if (error instanceof Error) {
