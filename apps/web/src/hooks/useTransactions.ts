@@ -8,10 +8,10 @@ export const useTransactions = () => {
   const { showNotification } = useNotification();
 
   const buyMutation = useMutation({
-    mutationFn: portfolioApi.buySecurity,
-    onSuccess: (data) => {
+    mutationFn: portfolioApi.transactBuy,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['portfolio'] });
-      showNotification(data.message, 'success');
+      showNotification('Compra realizada con éxito', 'success');
     },
     onError: (error) => {
       showNotification(error instanceof Error ? error.message : 'Error en la compra', 'error');
@@ -19,10 +19,10 @@ export const useTransactions = () => {
   });
 
   const sellMutation = useMutation({
-    mutationFn: portfolioApi.sellSecurity,
-    onSuccess: (data) => {
+    mutationFn: portfolioApi.transactSell,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['portfolio'] });
-      showNotification(data.message, 'success');
+      showNotification('Venta realizada con éxito', 'success');
     },
     onError: (error) => {
       showNotification(error instanceof Error ? error.message : 'Error en la venta', 'error');

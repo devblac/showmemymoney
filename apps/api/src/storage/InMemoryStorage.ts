@@ -5,6 +5,8 @@ import {
   Quote,
   PortfolioDTO,
   ValuationResponse,
+  Settings,
+  MarketDataConfig
 } from '../models/types.js';
 import { IStorage } from './IStorage.js';
 
@@ -14,6 +16,11 @@ export class InMemoryStorage implements IStorage {
   private positions: Position[] = [];
   private quotes: Quote[] = [];
   private historicalQuotes: Quote[] = [];
+  private settings: Settings = {
+    marketData: {
+      source: 'hardcoded'
+    }
+  };
 
   constructor() {
     this.initializeData();
@@ -241,5 +248,17 @@ export class InMemoryStorage implements IStorage {
       totalValuation,
       at,
     };
+  }
+
+  async getSettings(): Promise<Settings> {
+    return { ...this.settings };
+  }
+
+  async updateSettings(settings: Settings): Promise<void> {
+    this.settings = { ...settings };
+  }
+
+  async updateMarketDataConfig(config: MarketDataConfig): Promise<void> {
+    this.settings.marketData = { ...config };
   }
 };

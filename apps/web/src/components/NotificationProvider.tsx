@@ -5,16 +5,16 @@ interface NotificationContextType {
   showNotification: (message: string, severity?: AlertColor) => void;
 }
 
-export const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
-
-interface NotificationProviderProps {
-  children: React.ReactNode;
-}
-
 interface NotificationState {
   open: boolean;
   message: string;
   severity: AlertColor;
+}
+
+const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+
+interface NotificationProviderProps {
+  children: React.ReactNode;
 }
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
@@ -44,11 +44,19 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         autoHideDuration={6000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        className="dark:bg-gray-800"
       >
-        <Alert onClose={handleClose} severity={notification.severity} sx={{ width: '100%' }}>
+        <Alert 
+          onClose={handleClose} 
+          severity={notification.severity} 
+          sx={{ width: '100%' }}
+          className="dark:bg-gray-700 dark:text-white"
+        >
           {notification.message}
         </Alert>
       </Snackbar>
     </NotificationContext.Provider>
   );
 };
+
+export { NotificationContext };

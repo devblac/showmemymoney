@@ -18,15 +18,17 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { CashAccount, Position } from '../types/api';
+import { CashAccount } from '../types/api';
+import { ExtendedPosition } from '../types/portfolio';
 import { PositionsTable } from './PositionsTable';
+import { useTheme } from '../components/ThemeProvider';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface PosicionConsolidadaProps {
   cash: CashAccount;
-  positions: Position[];
+  positions: ExtendedPosition[];
   totalValuation: number;
 }
 
@@ -35,6 +37,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
   positions,
   totalValuation,
 }) => {
+  const { theme } = useTheme();
   const positionsValue = totalValuation - cash.balance;
 
   // Create a comprehensive pie chart with cash + all individual positions
@@ -61,7 +64,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
           '#c9cbcf'  // Gray
         ],
         borderWidth: 2,
-        borderColor: '#ffffff',
+        borderColor: theme === 'dark' ? '#1f2937' : '#ffffff',
       },
     ],
   };
@@ -75,6 +78,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
         labels: {
           padding: 10,
           usePointStyle: true,
+          color: theme === 'dark' ? '#e5e7eb' : '#111827',
           font: {
             size: 11
           },
@@ -97,15 +101,15 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
 
   return (
     <Box>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }} className="dark:text-white">
         Posición consolidada
       </Typography>
       
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {/* Left side - Summary list */}
         <Grid item xs={12} md={5}>
-          <Paper sx={{ p: 1.5, height: 260 }}>
-            <Typography variant="h6" gutterBottom sx={{ mb: 0.5, fontSize: '1.1rem' }}>
+          <Paper sx={{ p: 1.5, height: 280 }} className="dark:bg-gray-800">
+            <Typography variant="h6" gutterBottom sx={{ mb: 0.5, fontSize: '1.1rem' }} className="dark:text-white">
               Resumen del patrimonio
             </Typography>
             <List dense sx={{ pt: 0 }}>
@@ -115,7 +119,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" className="text-gray-600 dark:text-gray-300">
                       Efectivo disponible
                     </Typography>
                   }
@@ -127,7 +131,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                 />
               </ListItem>
               
-              <Divider sx={{ my: 0.25 }} />
+              <Divider sx={{ my: 0.25 }} className="dark:border-gray-700" />
               
               <ListItem sx={{ py: 0.5, px: 0 }}>
                 <ListItemIcon sx={{ minWidth: 35 }}>
@@ -135,7 +139,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" className="text-gray-600 dark:text-gray-300">
                       Inversiones
                     </Typography>
                   }
@@ -147,7 +151,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                 />
               </ListItem>
               
-              <Divider sx={{ my: 0.25 }} />
+              <Divider sx={{ my: 0.25 }} className="dark:border-gray-700" />
               
               <ListItem sx={{ py: 0.5, px: 0 }}>
                 <ListItemIcon sx={{ minWidth: 35 }}>
@@ -155,7 +159,7 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" className="text-gray-600 dark:text-gray-300">
                       Patrimonio total
                     </Typography>
                   }
@@ -172,8 +176,8 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
         
         {/* Right side - Single comprehensive chart */}
         <Grid item xs={12} md={7}>
-          <Paper sx={{ p: 1.5, height: 260, overflow: 'hidden' }}>
-            <Typography variant="h6" gutterBottom align="center" sx={{ mb: 0.5, fontSize: '1.1rem' }}>
+          <Paper sx={{ p: 1.5, height: 280, overflow: 'hidden' }} className="dark:bg-gray-800">
+            <Typography variant="h6" gutterBottom align="center" sx={{ mb: 0.5, fontSize: '1.1rem' }} className="dark:text-white">
               Composición del patrimonio
             </Typography>
             <Box sx={{ height: 220, position: 'relative', width: '100%' }}>
@@ -183,10 +187,10 @@ export const PosicionConsolidada: React.FC<PosicionConsolidadaProps> = ({
         </Grid>
       </Grid>
       
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 2 }} className="dark:border-gray-700" />
       
       {/* Positions Table */}
-      <Typography variant="h6" gutterBottom sx={{ mb: 1.5, mt: 2 }}>
+      <Typography variant="h6" gutterBottom sx={{ mb: 1.5, mt: 2 }} className="dark:text-white">
         Mis posiciones
       </Typography>
       <PositionsTable positions={positions} />

@@ -13,6 +13,7 @@ import { ArrowBack } from '@mui/icons-material';
 import { usePortfolio } from '../hooks/usePortfolio';
 import { TransactionForm } from '../components/TransactionForm';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import { Security, Position } from '../types/api';
 
 const SecurityDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,17 +22,13 @@ const SecurityDetail: React.FC = () => {
   const { portfolio, isLoading, error, refetch } = usePortfolio();
 
   const handleBack = () => {
-    // Return to the previous section if specified, otherwise default to 'posicion'
-    const returnSection = searchParams.get('from') || 'posicion';
-    navigate(`/?section=${returnSection}`);
+    const from = searchParams.get('from') || 'posicion';
+    navigate(from === 'posicion' ? '/' : '/inversiones');
   };
 
   const handleTransactionSuccess = () => {
-    // Refresh the portfolio data
     refetch();
-    
-    // Navigate back to "Posición consolidada" after successful transaction
-    navigate('/?section=posicion');
+    navigate('/');
   };
 
   if (isLoading) {
@@ -41,7 +38,7 @@ const SecurityDetail: React.FC = () => {
   if (error) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography color="error">
+        <Typography className="text-red-600 dark:text-red-400">
           Error al cargar el portafolio: {error instanceof Error ? error.message : 'Error desconocido'}
         </Typography>
       </Box>
@@ -51,100 +48,86 @@ const SecurityDetail: React.FC = () => {
   if (!portfolio || !id) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography>Instrumento no encontrado</Typography>
+        <Typography className="text-gray-600 dark:text-gray-300">Instrumento no encontrado</Typography>
       </Box>
     );
   }
 
-  const security = portfolio.securities.find(s => s.id === id);
-  const position = portfolio.positions.find(p => p.security.id === id) || null;
+  const security = portfolio.securities.find((s: Security) => s.id === id);
+  const position = portfolio.positions.find((p: Position) => p.security.id === id) || null;
 
   if (!security) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography>Instrumento no encontrado</Typography>
+        <Typography className="text-gray-600 dark:text-gray-300">Instrumento no encontrado</Typography>
       </Box>
     );
   }
 
-  // Find current price from a quote (this would typically come from the backend)
-  const currentPrice = position?.unitPrice || 150; // Default price for demo
+  const currentPrice = position?.unitPrice || 150;
 
   return (
-    <Box>
-      <Box sx={{ mb: 3 }}>
-        <Button
-          startIcon={<ArrowBack />}
-          onClick={handleBack}
-          sx={{ mb: 2 }}
-        >
-          Volver al panel
-        </Button>
-        
-        <Typography variant="h4" component="h1" gutterBottom>
-          {security.symbol} - {security.name}
-        </Typography>
-        
-        <Chip 
-          label={security.type} 
-          size="medium"
-          color={security.type === 'acción' ? 'primary' : 'secondary'}
-        />
-      </Box>
+    <Box sx={{ p: 2 }} className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={handleBack}
+        sx={{ mb: 3 }}
+        className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
+        Volver
+      </Button>
+
+      <Typography variant="h4" gutterBottom className="text-gray-900 dark:text-white mb-6">
+        {security.symbol}
+      </Typography>
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card className="dark:bg-gray-800">
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom className="text-gray-900 dark:text-white">
                 Información del instrumento
               </Typography>
               
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
-                  Símbolo
-                </Typography>
-                <Typography variant="body1" fontWeight="medium">
-                  {security.symbol}
-                </Typography>
-              </Box>
-              
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Nombre
                 </Typography>
-                <Typography variant="body1" fontWeight="medium">
+                <Typography variant="body1" className="text-gray-900 dark:text-white font-medium">
                   {security.name}
                 </Typography>
               </Box>
-              
+
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Tipo
                 </Typography>
-                <Typography variant="body1" fontWeight="medium">
-                  {security.type}
-                </Typography>
+                <Chip 
+                  label={security.type} 
+                  color={security.type === 'acción' ? 'primary' : 'secondary'}
+                  size="small"
+                  className="dark:bg-gray-700 dark:text-white"
+                />
               </Box>
               
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                   Precio actual
                 </Typography>
-                <Typography variant="h6" color="primary">
+                <Typography variant="h6" className="text-indigo-600 dark:text-indigo-400">
                   ${currentPrice.toLocaleString()}
                 </Typography>
               </Box>
               
               {position && (
                 <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                     Tu posición
                   </Typography>
-                  <Typography variant="body1" fontWeight="medium">
+                  <Typography variant="body1" className="text-gray-900 dark:text-white font-medium">
                     {position.quantity} títulos
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                     Valuación: ${position.valuation.toLocaleString()}
                   </Typography>
                 </Box>

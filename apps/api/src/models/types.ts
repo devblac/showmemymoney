@@ -46,3 +46,27 @@ export interface ValuationResponse {
   totalValuation: number;
   at: Date;
 }
+
+export interface MarketDataConfig {
+  source: 'hardcoded' | 'online';
+  broker?: {
+    id: number;
+    dni: string;
+    user: string;
+    password: string;
+  };
+}
+
+export interface Settings {
+  marketData: MarketDataConfig;
+  storage: {
+    type: StorageType;
+    postgresql?: {
+      host: string;
+      port: number;
+      database: string;
+      user: string;
+      // Password should be handled securely, possibly through env vars
+    };
+  };
+}

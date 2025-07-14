@@ -26,33 +26,34 @@ export const SecuritiesTable: React.FC<SecuritiesTableProps> = ({ securities }) 
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="dark:bg-gray-800">
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Instrumento</TableCell>
-            <TableCell>Tipo</TableCell>
-            <TableCell align="right">Acciones</TableCell>
+            <TableCell className="dark:text-gray-200">Instrumento</TableCell>
+            <TableCell className="dark:text-gray-200">Tipo</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {securities.map((security) => (
-            <TableRow key={security.id} hover>
-              <TableCell>
+            <TableRow key={security.id} hover className="dark:border-gray-700">
+              <TableCell className="dark:text-gray-200">
                 <div>
-                  <Typography variant="body1" fontWeight="medium">
+                  <Typography variant="body1" fontWeight="medium" className="dark:text-gray-200">
                     {security.symbol}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                     {security.name}
                   </Typography>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell className="dark:text-gray-200">
                 <Chip 
                   label={security.type} 
                   size="small"
                   color={security.type === 'acción' ? 'primary' : 'secondary'}
+                  className="dark:bg-gray-700"
                 />
               </TableCell>
               <TableCell align="right">
@@ -60,6 +61,7 @@ export const SecuritiesTable: React.FC<SecuritiesTableProps> = ({ securities }) 
                   variant="outlined" 
                   size="small"
                   onClick={() => handleSecurityClick(security.id)}
+                  className="dark:text-gray-200 dark:border-gray-600 hover:dark:border-gray-400"
                 >
                   Operar
                 </Button>

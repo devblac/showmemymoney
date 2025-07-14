@@ -12,10 +12,10 @@ import {
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Position } from '../types/api';
+import { ExtendedPosition } from '../types/portfolio';
 
 interface PositionsTableProps {
-  positions: Position[];
+  positions: ExtendedPosition[];
 }
 
 export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => {
@@ -27,8 +27,8 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => 
 
   if (positions.length === 0) {
     return (
-      <Paper sx={{ p: 2 }}>
-        <Typography variant="body1" color="text.secondary">
+      <Paper sx={{ p: 2 }} className="dark:bg-gray-800">
+        <Typography variant="body1" className="text-gray-600 dark:text-gray-300">
           No tienes posiciones abiertas
         </Typography>
       </Paper>
@@ -36,46 +36,48 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => 
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="dark:bg-gray-800">
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Instrumento</TableCell>
-            <TableCell>Tipo</TableCell>
-            <TableCell align="right">Cantidad</TableCell>
-            <TableCell align="right">Precio unitario</TableCell>
-            <TableCell align="right">Valuación</TableCell>
-            <TableCell align="right">Acciones</TableCell>
+            <TableCell className="dark:text-gray-200">Instrumento</TableCell>
+            <TableCell className="dark:text-gray-200">Tipo</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">Cantidad</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">Precio unitario</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">Valuación</TableCell>
+            <TableCell align="right" className="dark:text-gray-200">Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {positions.map((position) => (
-            <TableRow key={position.security.id}>
-              <TableCell>
+            <TableRow key={position.security.id} className="dark:border-gray-700">
+              <TableCell className="dark:text-gray-200">
                 <div>
-                  <Typography variant="body1" fontWeight="medium">
+                  <Typography variant="body1" fontWeight="medium" className="dark:text-gray-200">
                     {position.security.symbol}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" className="text-gray-600 dark:text-gray-400">
                     {position.security.name}
                   </Typography>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell className="dark:text-gray-200">
                 <Chip 
                   label={position.security.type} 
                   size="small"
                   color={position.security.type === 'acción' ? 'primary' : 'secondary'}
+                  className="dark:bg-gray-700"
                 />
               </TableCell>
-              <TableCell align="right">{position.quantity}</TableCell>
-              <TableCell align="right">${position.unitPrice.toLocaleString()}</TableCell>
-              <TableCell align="right">${position.valuation.toLocaleString()}</TableCell>
+              <TableCell align="right" className="dark:text-gray-200">{position.quantity}</TableCell>
+              <TableCell align="right" className="dark:text-gray-200">${position.unitPrice.toLocaleString()}</TableCell>
+              <TableCell align="right" className="dark:text-gray-200">${position.valuation.toLocaleString()}</TableCell>
               <TableCell align="right">
                 <Button 
                   variant="outlined" 
                   size="small"
                   onClick={() => handleOperateClick(position.security.id)}
+                  className="dark:text-gray-200 dark:border-gray-600 hover:dark:border-gray-400"
                 >
                   Operar
                 </Button>

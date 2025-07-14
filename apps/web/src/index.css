@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Toggle Switch Styles */
+.toggle-switch {
+  @apply relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700;
+}
+
+.toggle-switch[data-checked="true"] {
+  @apply bg-indigo-600 dark:bg-indigo-500;
+}
+
+.toggle-switch[data-checked="false"] {
+  @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.toggle-switch-thumb {
+  @apply inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ease-in-out;
+}
+
+.toggle-switch[data-checked="true"] .toggle-switch-thumb {
+  @apply translate-x-6;
+}
+
+.toggle-switch[data-checked="false"] .toggle-switch-thumb {
+  @apply translate-x-1;
+}
+
+/* Dark mode transitions */
+.dark * {
+  @apply transition-colors duration-200;
+}
+
+/* Dark mode input styles */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #374151 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Dark mode scrollbar styles */
+.dark ::-webkit-scrollbar {
+  width: 12px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}

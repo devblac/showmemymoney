@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 
 export const LoadingSpinner: React.FC = () => {
   return (
@@ -8,10 +8,11 @@ export const LoadingSpinner: React.FC = () => {
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center', 
-        height: '200px' 
+        minHeight: '100vh' 
       }}
+      className="bg-white dark:bg-gray-900"
     >
-      <CircularProgress />
+      <CircularProgress className="text-indigo-600 dark:text-indigo-400" />
     </Box>
   );
 };
