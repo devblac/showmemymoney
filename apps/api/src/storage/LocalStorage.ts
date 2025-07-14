@@ -179,10 +179,11 @@ export class LocalStorage implements IStorage {
   }
 
   async getPortfolioValue(): Promise<PortfolioDTO> {
-    const [cash, positions, securities] = await Promise.all([
+    const [cash, positions, securities, quotes] = await Promise.all([
       this.getCashAccount(),
       this.getPositions(),
       this.getSecurities(),
+      this.getQuotes(),
     ]);
 
     const positionDetails = await Promise.all(
@@ -210,6 +211,7 @@ export class LocalStorage implements IStorage {
       cash,
       positions: positionDetails,
       securities,
+      quotes,
       totalValuation,
     };
   }
@@ -262,7 +264,7 @@ export class LocalStorage implements IStorage {
 
   // Fix implicit any types
   private sortQuotesByDate(quotes: Quote[]): Quote[] {
-    return quotes.sort((a: Quote, b: Quote) => {
+    return quotes.sort((q: Quote, a: Quote, b: Quote) => {
       return new Date(b.at).getTime() - new Date(a.at).getTime();
     });
   }
