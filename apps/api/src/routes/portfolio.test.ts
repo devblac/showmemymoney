@@ -2,12 +2,14 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createServer } from '../server.js';
 import { Express } from 'express';
+import { InMemoryStorage } from '../storage/InMemoryStorage.js';
 
 describe('Portfolio API', () => {
   let app: Express;
 
   beforeEach(() => {
-    app = createServer();
+    const storage = new InMemoryStorage();
+    app = createServer(storage);
   });
 
   describe('GET /api/portfolio', () => {

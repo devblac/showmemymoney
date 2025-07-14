@@ -114,4 +114,17 @@ export class PostgresStorage implements IStorage {
   async getValuationAtDate(at: Date): Promise<ValuationResponse> {
     throw new Error('Not implemented');
   }
+
+  // Add missing methods
+  async updateSettings(settings: Settings): Promise<void> {
+    throw new Error('Not implemented');
+  }
+
+  async transactBuy(securityId: string, quantity: number): Promise<void> {
+    throw new Error('Not implemented');
+  }
+
+  async transactSell(securityId: string, quantity: number): Promise<void> {
+    throw new Error('Not implemented');
+  }
 }

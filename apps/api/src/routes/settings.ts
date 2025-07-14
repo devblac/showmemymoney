@@ -30,7 +30,7 @@ const MarketDataConfigSchema = z
 
 const StorageConfigSchema = z
   .object({
-    type: z.enum(['memory', 'localStorage', 'postgresql']),
+    type: z.enum([StorageType.MEMORY, StorageType.LOCAL_STORAGE, StorageType.POSTGRESQL]),
     postgresql: z
       .object({
         host: z.string(),

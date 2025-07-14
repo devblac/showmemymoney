@@ -1,3 +1,5 @@
+import { StorageType, StorageConfig } from '../storage/IStorage.js';
+
 export interface CashAccount {
   balance: number;
 }
@@ -29,6 +31,7 @@ export interface PortfolioDTO {
     valuation: number;
   }>;
   securities: Security[];
+  quotes: Quote[];  // Add this line
   totalValuation: number;
 }
 
@@ -59,14 +62,5 @@ export interface MarketDataConfig {
 
 export interface Settings {
   marketData: MarketDataConfig;
-  storage: {
-    type: StorageType;
-    postgresql?: {
-      host: string;
-      port: number;
-      database: string;
-      user: string;
-      // Password should be handled securely, possibly through env vars
-    };
-  };
+  storage: StorageConfig;  // Reuse StorageConfig instead of duplicating the structure
 }

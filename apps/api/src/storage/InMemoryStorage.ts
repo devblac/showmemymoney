@@ -9,6 +9,7 @@ import {
   MarketDataConfig,
 } from '../models/types.js';
 import { IStorage } from './IStorage.js';
+import { StorageType } from './IStorage.js';
 
 export class InMemoryStorage implements IStorage {
   private cashAccount: CashAccount = { balance: 100000 }; // Initial balance
@@ -20,6 +21,9 @@ export class InMemoryStorage implements IStorage {
     marketData: {
       source: 'hardcoded',
     },
+    storage: {
+      type: StorageType.MEMORY
+    }
   };
 
   constructor() {
@@ -156,6 +160,7 @@ export class InMemoryStorage implements IStorage {
       cash,
       positions: positionDetails,
       securities,
+      quotes: this.quotes, // Added this line
       totalValuation,
     };
   }

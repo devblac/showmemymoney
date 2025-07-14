@@ -250,4 +250,20 @@ export class LocalStorage implements IStorage {
     });
     console.groupEnd();
   }
+
+  // Add missing methods
+  async transactBuy(securityId: string, quantity: number): Promise<void> {
+    throw new Error('Not implemented');
+  }
+
+  async transactSell(securityId: string, quantity: number): Promise<void> {
+    throw new Error('Not implemented');
+  }
+
+  // Fix implicit any types
+  private sortQuotesByDate(quotes: Quote[]): Quote[] {
+    return quotes.sort((a: Quote, b: Quote) => {
+      return new Date(b.at).getTime() - new Date(a.at).getTime();
+    });
+  }
 }

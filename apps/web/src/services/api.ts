@@ -22,6 +22,9 @@ export const portfolioApi = {
     const storageType = stateService.getCurrentStorageType();
 
     if (storageType === StorageType.LOCAL_STORAGE) {
+      // Ensure quotes are initialized
+      localStorageService.initializeState();
+      
       const state = localStorageService.getState();
       // Calculamos la valuación total
       const totalValuation = state.positions.reduce((total, pos) => {
@@ -54,7 +57,7 @@ export const portfolioApi = {
       cash: response.data.cash,
       securities: response.data.securities,
       positions: response.data.positions,
-      quotes: response.data.quotes,
+      ...(response.data.quotes && { quotes: response.data.quotes }), // Only include quotes if they exist
     });
     return response.data;
   },
@@ -64,8 +67,19 @@ export const portfolioApi = {
 
     if (storageType === StorageType.LOCAL_STORAGE) {
       const state = localStorageService.getState();
-      const quote = state.quotes.find(q => q.securityId === request.securityId)!;
+      const quote = state.quotes.find(q => q.securityId === request.securityId);
+      
+      // If quote doesn't exist, throw error
+      if (!quote) {
+        throw new Error('No hay cotización disponible para este instrumento');
+      }
+
       const cost = quote.price * request.quantity;
+
+      // Verificar fondos suficientes
+      if (state.cash.balance < cost) {
+        throw new Error('Fondos insuficientes');
+      }
 
       // Actualizar cash
       state.cash.balance -= cost;
