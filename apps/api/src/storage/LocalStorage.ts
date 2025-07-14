@@ -264,7 +264,7 @@ export class LocalStorage implements IStorage {
 
   // Fix implicit any types
   private sortQuotesByDate(quotes: Quote[]): Quote[] {
-    return quotes.sort((q: Quote, a: Quote, b: Quote) => {
+    return quotes.sort((a: Quote, b: Quote) => {
       return new Date(b.at).getTime() - new Date(a.at).getTime();
     });
   }
