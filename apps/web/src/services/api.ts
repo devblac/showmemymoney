@@ -40,6 +40,7 @@ export const portfolioApi = {
           const security = state.securities.find(s => s.id === pos.securityId)!;
           const quote = state.quotes.find(q => q.securityId === pos.securityId)!;
           return {
+            securityId: pos.securityId, // Add this line
             security,
             quantity: pos.quantity,
             unitPrice: quote.price,
@@ -53,12 +54,15 @@ export const portfolioApi = {
 
     // Si no, obtenemos del backend
     const response = await api.get<PortfolioDTO>('/portfolio');
-    // Actualizamos el estado local si es necesario
+    // Update the positions mapping to include securityId
     await stateService.updateState({
       cash: response.data.cash,
       securities: response.data.securities,
-      positions: response.data.positions,
-      ...(response.data.quotes && { quotes: response.data.quotes }), // Only include quotes if they exist
+      positions: response.data.positions.map(p => ({
+        securityId: p.security.id,
+        quantity: p.quantity
+      })),
+      ...(response.data.quotes && { quotes: response.data.quotes }),
     });
     return response.data;
   },

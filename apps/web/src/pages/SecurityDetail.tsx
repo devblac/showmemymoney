@@ -5,7 +5,15 @@ import { ArrowBack } from '@mui/icons-material';
 import { usePortfolio } from '../hooks/usePortfolio';
 import { TransactionForm } from '../components/TransactionForm';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { Security, Position } from '../types/api';
+import { Security } from '../types/api';
+
+// Define ExtendedPosition type to match the portfolio positions structure
+interface ExtendedPosition {
+  security: Security;
+  quantity: number;
+  unitPrice: number;
+  valuation: number;
+}
 
 const SecurityDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -49,7 +57,7 @@ const SecurityDetail: React.FC = () => {
   }
 
   const security = portfolio.securities.find((s: Security) => s.id === id);
-  const position = portfolio.positions.find((p) => p.security.id === id);
+  const position = portfolio.positions.find((p) => p.security.id === id) as ExtendedPosition | null;
 
   if (!security) {
     return (

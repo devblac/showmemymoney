@@ -5,7 +5,6 @@ import { useNotification } from '../hooks/useNotification';
 import { useTheme } from './ThemeProvider';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { StorageType } from '../types/api';
-import { getStoragePreference, setStoragePreference } from '../services/storagePreference';
 import { localStorageService } from '../services/localStorageService';
 import { portfolioApi } from '../services/api';
 import { StorageConfig } from '../types/api';
