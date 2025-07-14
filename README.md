@@ -46,7 +46,7 @@ Una aplicación web para gestionar tu portfolio de inversiones en el mercado arg
 
 1. Cloná el repositorio:
 ```bash
-git clone https://github.com/tuuser/showmemymoney.git
+git clone [https://github.com/tuuser/showmemymoney.git](https://github.com/devblac/showmemymoney.git)
 cd showmemymoney
 ```
 
