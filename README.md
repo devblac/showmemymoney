@@ -16,7 +16,8 @@ Una aplicación web para gestionar tu portfolio de inversiones en el mercado arg
 ### Screenshots
 
 #### Dashboard
-![Dashboard](./docs/images/dashboard.png)
+<img width="1258" height="881" alt="Screenshot 2025-07-14 165257" src="https://github.com/user-attachments/assets/4e244dfe-6668-40cd-b554-11215df54059" />
+
 *Vista principal con resumen del portfolio*
 
 #### Operaciones
