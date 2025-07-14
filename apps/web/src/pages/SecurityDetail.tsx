@@ -49,7 +49,7 @@ const SecurityDetail: React.FC = () => {
   }
 
   const security = portfolio.securities.find((s: Security) => s.id === id);
-  const position = portfolio.positions.find((p: Position) => p.security.id === id) || null;
+  const position = portfolio.positions.find((p) => p.security.id === id);
 
   if (!security) {
     return (

@@ -46,6 +46,7 @@ export const portfolioApi = {
             valuation: quote.price * pos.quantity,
           };
         }),
+        quotes: state.quotes, // Add this line
         totalValuation,
       };
     }

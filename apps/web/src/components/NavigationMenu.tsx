@@ -5,7 +5,7 @@ export interface NavigationMenuProps {
   onSectionChange?: (section: 'posicion' | 'inversiones') => void;
 }
 
-export function NavigationMenu({ currentSection, onSectionChange }: NavigationMenuProps) {
+export function NavigationMenu({ onSectionChange }: NavigationMenuProps) {
   return (
     <nav className="bg-gray-800 dark:bg-gray-900 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
