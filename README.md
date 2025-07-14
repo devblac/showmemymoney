@@ -20,12 +20,20 @@ Una aplicación web para gestionar tu portfolio de inversiones en el mercado arg
 
 *Vista principal con resumen del portfolio*
 
+#### Instrumentos
+<img width="1256" height="583" alt="Screenshot 2025-07-14 165455" src="https://github.com/user-attachments/assets/682f3d72-b16c-4453-8437-937418dcb936" />
+
+*Pantalla con listado de instrumentos financieros disponibles para operar*
+
+
 #### Operaciones
-![Operaciones](./docs/images/operaciones.png)
+<img width="1250" height="534" alt="Screenshot 2025-07-14 165443" src="https://github.com/user-attachments/assets/d48ed263-7d33-4137-9bd2-2ca17d5decbe" />
+
 *Pantalla de carga de operaciones*
 
 #### Preferencias
-![Preferencias](./docs/images/preferencias.png)
+<img width="664" height="414" alt="Screenshot 2025-07-14 165501" src="https://github.com/user-attachments/assets/0b1158e6-715c-4965-b17a-cf49507d17ca" />
+
 *Configuración de la aplicación*
 
 ## 🚀 Comenzando
