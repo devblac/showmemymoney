@@ -14,9 +14,18 @@ import { StorageType } from '../types/api';
 import { config } from '../config/env';
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `${config.apiUrl}/api`,
   withCredentials: true,
 });
+
+// Development logging
+if (import.meta.env.DEV) {
+  console.log('🔧 API Configuration:', {
+    envVar: import.meta.env.VITE_API_URL,
+    finalApiUrl: config.apiUrl,
+    baseURL: `${config.apiUrl}/api`
+  });
+}
 
 export const portfolioApi = {
   getPortfolio: async (): Promise<PortfolioDTO> => {
