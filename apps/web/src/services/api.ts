@@ -14,7 +14,7 @@ import { StorageType } from '../types/api';
 import { config } from '../config/env';
 
 const api = axios.create({
-  baseURL: `${config.apiUrl}/api`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
   withCredentials: true,
 });
 

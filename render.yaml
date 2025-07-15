@@ -1,0 +1,19 @@
+services:
+  - name: showmemymoney-api
+    type: web
+    env: node
+    buildCommand: pnpm install && pnpm build:api
+    startCommand: cd apps/api && node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+
+  - name: showmemymoney-web
+    type: static
+    buildCommand: pnpm install && pnpm build:web
+    staticPublishPath: apps/web/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://showmemymoney-api.onrender.com 

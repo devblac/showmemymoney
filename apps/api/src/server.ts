@@ -22,12 +22,17 @@ const defaultStorageConfig = {
 export function createServer(storage: IStorage) {
   const app = express();
 
-  app.use(
-    cors({
-      origin: 'http://localhost:5173',
-      credentials: true,
-    })
-  );
+  const allowedOrigins = [
+    'http://localhost:5173', // Local development
+    'https://showmemymoney.onrender.com', // Production frontend URL
+  ];
+
+  app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+      ? allowedOrigins 
+      : true,
+    credentials: true
+  }));
   app.use(express.json());
 
   app.use('/api/portfolio', createPortfolioRouter(storage));
@@ -38,10 +43,11 @@ export function createServer(storage: IStorage) {
 
   // Health check that includes storage type
   app.get('/health', (req, res) => {
-    res.json({
+    res.status(200).json({
       status: 'ok',
-      timestamp: new Date().toISOString(),
-      storageType: storage.constructor.name,
+      timestamp: new Date(),
+      uptime: process.uptime(),
+      memoryUsage: process.memoryUsage(),
     });
   });
 

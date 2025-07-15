@@ -4,12 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "type-check": "tsc --noEmit"
+    "preview": "node dist/index.js"
   },
   "dependencies": {
     "@types/pg": "^8.15.4",
