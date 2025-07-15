@@ -2,7 +2,6 @@
 
 Una aplicación web para gestionar tu portfolio de inversiones en el mercado argentino. Seguí tus inversiones, realizá operaciones y mantené un registro de tu patrimonio de manera simple y efectiva.
 
-![Dashboard Preview](./docs/images/dashboard.png)
 
 ## 🌟 Características principales
 
