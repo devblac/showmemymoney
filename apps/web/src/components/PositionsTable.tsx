@@ -72,9 +72,11 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({ positions }) => 
               <TableCell className="dark:text-gray-200">
                 <Chip
                   label={position.security.type}
-                  size="small"
                   color={position.security.type === 'acción' ? 'primary' : 'secondary'}
-                  className="dark:bg-gray-700"
+                  size="small"
+                  className={`dark:text-white ${
+                    position.security.type === 'acción' ? 'dark:bg-blue-600' : 'dark:bg-purple-600'
+                  }`}
                 />
               </TableCell>
               <TableCell align="right" className="dark:text-gray-200">

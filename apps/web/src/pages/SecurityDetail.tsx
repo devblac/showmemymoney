@@ -111,7 +111,9 @@ const SecurityDetail: React.FC = () => {
                   label={security.type}
                   color={security.type === 'acción' ? 'primary' : 'secondary'}
                   size="small"
-                  className="dark:bg-gray-700 dark:text-white"
+                  className={`dark:text-white ${
+                    security.type === 'acción' ? 'dark:bg-blue-600' : 'dark:bg-purple-600'
+                  }`}
                 />
               </Box>
 

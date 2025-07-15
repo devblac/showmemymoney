@@ -11,9 +11,10 @@ import type {
 import { stateService } from './stateService';
 import { localStorageService } from './localStorageService';
 import { StorageType } from '../types/api';
+import { config } from '../config/env';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: `${config.apiUrl}/api`,
   withCredentials: true,
 });
 

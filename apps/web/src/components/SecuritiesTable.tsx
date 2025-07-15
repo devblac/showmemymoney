@@ -53,9 +53,11 @@ export const SecuritiesTable: React.FC<SecuritiesTableProps> = ({ securities }) 
               <TableCell className="dark:text-gray-200">
                 <Chip
                   label={security.type}
-                  size="small"
                   color={security.type === 'acción' ? 'primary' : 'secondary'}
-                  className="dark:bg-gray-700"
+                  size="small"
+                  className={`dark:text-white ${
+                    security.type === 'acción' ? 'dark:bg-blue-600' : 'dark:bg-purple-600'
+                  }`}
                 />
               </TableCell>
               <TableCell align="right">
