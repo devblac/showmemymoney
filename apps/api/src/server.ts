@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, Express } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import { createPortfolioRouter } from './routes/portfolio.js';
@@ -20,7 +20,7 @@ const defaultStorageConfig = {
 };
 
 export function createServer(storage: IStorage) {
-  const app = express();
+  const app: Express = express();
 
   const allowedOrigins = [
     'http://localhost:5173', // Local development
@@ -42,19 +42,14 @@ export function createServer(storage: IStorage) {
   app.use('/api/settings', createSettingsRouter(storage));
 
   // Health check that includes storage type
-  app.get('/health', (req, res) => {
-    res.status(200).json({
-      status: 'ok',
-      timestamp: new Date(),
-      uptime: process.uptime(),
-      memoryUsage: process.memoryUsage(),
-    });
+  app.get('/health', (req: Request, res: Response) => {
+    res.status(200).json({ status: 'ok' });
   });
 
   // Error handling
-  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((err: Error, req: Request, res: Response, next: express.NextFunction) => {
     console.error(err.stack);
-    res.status(500).json({ error: 'Algo salió mal' });
+    res.status(500).json({ error: 'Something broke!' });
   });
 
   // 404 handler
